@@ -1,0 +1,22 @@
+.node {
+  width: 23px;
+  height: 23px;
+  outline: 1px solid rgb(175, 216, 248);
+  display: inline-block;
+}
+
+.node-finish {
+  background-color: red !important;
+}
+
+.node-start {
+  background-color: green !important;
+}
+
+.node-wall {
+  background-color: rgb(12, 53, 71) !important;
+}
+
+.node-path {
+  background-color: yellow;
+}
