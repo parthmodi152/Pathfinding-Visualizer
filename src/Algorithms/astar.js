@@ -1,69 +1,47 @@
+import { getNeighbors } from "./utils.js";
+
 export function astar(grid, startNode, finishNode) {
-  const visitedNodesInOrder = [];
-  const testedNodesInOrder = [];
-  startNode.distance = 0;
-  startNode.total_distance = startNode.distance + startNode.heuristic;
-  const unvisitedNodes = [];
-  unvisitedNodes.push(startNode);
+  var openSet = [];
+  var closedSet = [];
 
-  while (unvisitedNodes.length > 0) {
-    var c = 0;
-    c++;
-    console.log(c);
-    sortNodesByDistance(unvisitedNodes);
+  openSet.push(startNode);
 
-    if (unvisitedNodes.length != 0 && unvisitedNodes[0].isVisited) {
-      unvisitedNodes.shift();
-    }
+  while (openSet.length > 0) {
+    openSet.sort((a, b) => a.f - b.f);
 
-    if (unvisitedNodes.length == 0) {
-      break;
-    }
+    var closestNode = openSet.shift();
 
-    var nodeCurrent = unvisitedNodes[0];
-    nodeCurrent.isVisited = true;
-    visitedNodesInOrder.push(nodeCurrent);
+    closedSet.push(closestNode);
+    closestNode.isVisited = true;
 
-    var nodeNeighbours = getFilteredNeighbors(nodeCurrent, grid);
+    if (closestNode.isFinish) return closedSet;
 
-    for (var i = 0; i < nodeNeighbours.length; i++) {
-      unvisitedNodes.push(nodeNeighbours[i]);
-      if (nodeCurrent.distance + 1 < nodeNeighbours[i].distance) {
-        nodeNeighbours[i].previousNode = nodeCurrent;
-        nodeNeighbours[i].distance = nodeCurrent.distance + 1;
-        nodeNeighbours[i].total_distance =
-          nodeNeighbours[i].distance + nodeNeighbours[i].heuristic;
-      }
+    var nodeNeighbors = getNeighbors(closestNode, grid);
+    for (var i = 0; i < nodeNeighbors.length; i++) {
+      var neighbor = nodeNeighbors[i];
+      if (!neighbor.isVisited && !neighbor.isWall) {
+        var tempG = 0;
+        if (neighbor.isWeight) {
+          tempG = closestNode.g + 500;
+        } else {
+          tempG = closestNode.g + 1;
+        }
+
+        if (openSet.includes(neighbor)) {
+          if (tempG < neighbor.g) {
+            neighbor.g = tempG;
+            neighbor.previousNode = closestNode;
+          }
+        } else {
+          neighbor.g = tempG;
+          openSet.push(neighbor);
+          neighbor.previousNode = closestNode;
+        }
+
+        neighbor.f = neighbor.h + neighbor.g;
+      } else continue;
     }
   }
 
-  return visitedNodesInOrder;
-}
-
-function sortNodesByDistance(unvisitedNodes) {
-  unvisitedNodes.sort(
-    (nodeA, nodeB) => nodeA.total_distance - nodeB.total_distance
-  );
-}
-
-function getFilteredNeighbors(node, grid) {
-  const neighbors = [];
-  const { col, row } = node;
-  if (row > 0) neighbors.push(grid[row - 1][col]);
-  if (row < grid.length - 1) neighbors.push(grid[row + 1][col]);
-  if (col > 0) neighbors.push(grid[row][col - 1]);
-  if (col < grid[0].length - 1) neighbors.push(grid[row][col + 1]);
-  return neighbors.filter(
-    (neighbor) => !neighbor.isVisited && !neighbor.isWall
-  );
-}
-
-export function getNodesInShortestPathOrder(finishNode) {
-  const nodesInShortestPathOrder = [];
-  let currentNode = finishNode;
-  while (currentNode !== null) {
-    nodesInShortestPathOrder.unshift(currentNode);
-    currentNode = currentNode.previousNode;
-  }
-  return nodesInShortestPathOrder;
+  return closedSet;
 }
