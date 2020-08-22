@@ -14,7 +14,7 @@ export function astar(grid, startNode, finishNode) {
     closedSet.push(closestNode);
     closestNode.isVisited = true;
 
-    if (closestNode.isFinish) return closedSet;
+    if (closestNode === finishNode) return closedSet;
 
     var nodeNeighbors = getNeighbors(closestNode, grid);
     for (var i = 0; i < nodeNeighbors.length; i++) {
@@ -37,7 +37,9 @@ export function astar(grid, startNode, finishNode) {
           openSet.push(neighbor);
           neighbor.previousNode = closestNode;
         }
-
+        neighbor.h =
+          Math.abs(finishNode.col - neighbor.col) +
+          Math.abs(finishNode.row - neighbor.row);
         neighbor.f = neighbor.h + neighbor.g;
       } else continue;
     }

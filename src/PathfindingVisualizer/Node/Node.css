@@ -20,12 +20,6 @@
   background-position: center;
 }
 
-.node-bomb {
-  background-image: url(../assets/bomb.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-}
-
 .node-finish {
   /* background-color: red !important; */
   background-image: url(../assets/finalNode.svg);
@@ -78,6 +72,12 @@
     background-color: rgb(12, 53, 71);
   }
 } */
+
+.node-bomb {
+  background-image: url(../assets/bomb.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
 
 .node-visited {
   animation-name: visitedAnimation;

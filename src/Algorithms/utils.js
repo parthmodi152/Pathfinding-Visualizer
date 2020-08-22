@@ -1,4 +1,4 @@
-export function getNodesInShortestPathOrder(finishNode) {
+export function getNodesInShortestPathOrder(startNode, finishNode) {
   const nodesInShortestPathOrder = [];
   let currentNode = finishNode;
   while (currentNode !== null) {
