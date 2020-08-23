@@ -5,9 +5,6 @@ import { dijkstra } from "../Algorithms/dijkstra.js";
 import { astar } from "../Algorithms/astar.js";
 import { bfs } from "../Algorithms/bfs.js";
 import { getNodesInShortestPathOrder } from "../Algorithms/utils.js";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.min.js";
-import { DropdownButton } from "react-bootstrap";
 
 var rows = 10;
 var columns = 50;
@@ -123,6 +120,7 @@ export default class PathfindingVisualizer extends Component {
 
   visualizeAlgo() {
     if (this.state.bomb) {
+      console.log("starting");
       const firstAlgoGrid = this.state.grid;
       const secondAlgoGrid = this.state.grid;
 
@@ -130,7 +128,7 @@ export default class PathfindingVisualizer extends Component {
       const finishNode = firstAlgoGrid[FINISH_NODE_ROW][FINISH_NODE_COL];
       const bombNode = firstAlgoGrid[BOMB_NODE_ROW][BOMB_NODE_COL];
 
-      const firstVisitedNodesInOrder = astar(
+      const firstVisitedNodesInOrder = dijkstra(
         firstAlgoGrid,
         startNode,
         bombNode
@@ -139,17 +137,33 @@ export default class PathfindingVisualizer extends Component {
         startNode,
         bombNode
       );
-      const secondVisitedNodesInOrder = astar(
-        secondAlgoGrid,
+
+      console.log("first path clear");
+
+      this.clearGrid(
+        firstAlgoGrid,
+        (this.keepWall = true),
+        (this.keepWeight = true),
+        (this.keepBomb = true)
+      );
+
+      console.log("grid cleared");
+
+      const secondVisitedNodesInOrder = dijkstra(
+        firstAlgoGrid,
         bombNode,
         finishNode
       );
+      console.log("got second visited path");
       const secondNodesInShortestPathOrder = getNodesInShortestPathOrder(
         bombNode,
         finishNode
       );
 
-      this.animateShortestPath(firstNodesInShortestPathOrder);
+      console.log("hello");
+
+      console.log(firstNodesInShortestPathOrder);
+      console.log(secondNodesInShortestPathOrder);
     } else {
       const { grid } = this.state;
       const startNode = grid[START_NODE_ROW][START_NODE_COL];
@@ -242,8 +256,8 @@ export default class PathfindingVisualizer extends Component {
     }
   }
 
-  clearGrid(keepWall = false, keepWeight = false, keepBomb = false) {
-    const { grid } = this.state;
+  clearGrid(Grid, keepWall, keepWeight, keepBomb) {
+    const grid = Grid;
     for (let row of grid) {
       for (let node of row) {
         if (node.row === START_NODE_ROW && node.col === START_NODE_COL) {
@@ -270,7 +284,7 @@ export default class PathfindingVisualizer extends Component {
     }
   }
 
-  resetNode(node, keepWall = false, keepWeight = false, keepBomb = false) {
+  resetNode(node, keepWall, keepWeight, keepBomb) {
     node.distance = Infinity;
     node.isVisited = false;
     node.previousNode = null;
@@ -336,6 +350,7 @@ export default class PathfindingVisualizer extends Component {
         <button
           onClick={() =>
             this.clearGrid(
+              this.state.grid,
               ((this.keepWall = false),
               (this.keepWeight = false),
               (this.keepBomb = false))

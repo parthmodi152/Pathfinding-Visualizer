@@ -4,12 +4,13 @@ export function bfs(grid, startNode, finishNode) {
   startNode.distance = 0;
   const visitedNodesInOrder = [];
   const queue = [];
+  startNode.previousNode = null;
   queue.push(startNode);
 
   while (queue.length > 0) {
     const currentNode = queue.shift();
 
-    if (currentNode.isFinish) {
+    if (currentNode == finishNode) {
       visitedNodesInOrder.push(currentNode);
       return visitedNodesInOrder;
     }

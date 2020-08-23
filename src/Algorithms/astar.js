@@ -4,6 +4,7 @@ export function astar(grid, startNode, finishNode) {
   var openSet = [];
   var closedSet = [];
 
+  startNode.previousNode = null;
   openSet.push(startNode);
 
   while (openSet.length > 0) {

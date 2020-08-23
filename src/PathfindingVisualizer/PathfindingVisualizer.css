@@ -1,6 +1,5 @@
 .grid {
   display: block;
-  margin: 100px auto;
   user-select: none;
   /* To disable node highlighting which causes bug in creating walls or dragging start and end point */
   -moz-user-select: none;
