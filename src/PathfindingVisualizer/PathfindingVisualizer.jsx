@@ -80,29 +80,36 @@ export default class PathfindingVisualizer extends Component {
 
   handleMouseEnter(row, col) {
     if (!this.state.mouseIsPressed) return;
+    let node = this.state.grid[row][col];
     if (this.state.specialNodePressed === "start") {
-      const newGrid = createNewGridWithStartNodeToggled(
-        this.state.grid,
-        row,
-        col
-      );
-      this.setState({ grid: newGrid });
+      if (!node.isFinish && !node.isBomb) {
+        const newGrid = createNewGridWithStartNodeToggled(
+          this.state.grid,
+          row,
+          col
+        );
+        this.setState({ grid: newGrid });
+      }
     } else if (this.state.specialNodePressed === "finish") {
-      const newGrid = createNewGridWithFinishNodeToggled(
-        this.state.grid,
-        row,
-        col
-      );
-      this.setState({ grid: newGrid });
+      if (!node.isStart && !node.isBomb) {
+        const newGrid = createNewGridWithFinishNodeToggled(
+          this.state.grid,
+          row,
+          col
+        );
+        this.setState({ grid: newGrid });
+      }
     } else if (this.state.specialNodePressed === "bomb") {
-      const newGrid = createNewGridWithBombNodeToggled(
-        this.state.grid,
-        row,
-        col
-      );
-      this.setState({
-        grid: newGrid,
-      });
+      if (!node.isStart && !node.isFinish) {
+        const newGrid = createNewGridWithBombNodeToggled(
+          this.state.grid,
+          row,
+          col
+        );
+        this.setState({
+          grid: newGrid,
+        });
+      }
     } else {
       const newGrid = createNewGridWithWallToggled(
         this.state.grid,
