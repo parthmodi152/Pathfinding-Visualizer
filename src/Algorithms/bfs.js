@@ -6,16 +6,17 @@ export function bfs(grid, startNode, finishNode) {
   const queue = [];
   startNode.previousNode = null;
   queue.push(startNode);
-
   while (queue.length > 0) {
     const currentNode = queue.shift();
-
     if (currentNode == finishNode) {
       visitedNodesInOrder.push(currentNode);
       return visitedNodesInOrder;
     }
 
-    if (!currentNode.isWall && !currentNode.isVisited) {
+    if (
+      (!currentNode.isWall && !currentNode.isVisited) ||
+      (currentNode.isBomb && !currentNode.isVisited)
+    ) {
       currentNode.isVisited = true;
       visitedNodesInOrder.push(currentNode);
       const neighbors = getUnvisitedNeighbors(currentNode, grid);

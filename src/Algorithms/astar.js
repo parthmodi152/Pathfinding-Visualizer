@@ -15,14 +15,19 @@ export function astar(grid, startNode, finishNode) {
     closedSet.push(closestNode);
     closestNode.isVisited = true;
 
-    if (closestNode === finishNode) return closedSet;
+    if (closestNode === finishNode) {
+      return closedSet;
+    }
 
     var nodeNeighbors = getNeighbors(closestNode, grid);
     for (var i = 0; i < nodeNeighbors.length; i++) {
       var neighbor = nodeNeighbors[i];
-      if (!neighbor.isVisited && !neighbor.isWall) {
+      if (
+        (!neighbor.isVisited && !neighbor.isWall) ||
+        (!neighbor.isVisited && neighbor.isBomb)
+      ) {
         var tempG = 0;
-        if (neighbor.isWeight) {
+        if (neighbor.isWeight && !neighbor.isBomb) {
           tempG = closestNode.g + 500;
         } else {
           tempG = closestNode.g + 1;

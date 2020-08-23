@@ -16,10 +16,23 @@ export default class Node extends Component {
       onMouseUp,
       row,
     } = this.props;
+
+    var isWallandBomb = false;
+    if (isWall & isBomb) {
+      isWallandBomb = true;
+    }
+    var isWeightandBomb = false;
+    if (isWeight & isBomb) {
+      isWeightandBomb = true;
+    }
     const extraClassName = isFinish
       ? "node-finish"
       : isStart
       ? "node-start"
+      : isWallandBomb
+      ? "node-wall node-bomb"
+      : isWeightandBomb
+      ? "node-weight node-bomb"
       : isWall
       ? "node-wall"
       : isWeight

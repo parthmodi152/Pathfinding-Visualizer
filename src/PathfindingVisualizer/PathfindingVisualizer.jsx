@@ -127,7 +127,6 @@ export default class PathfindingVisualizer extends Component {
 
   visualizeAlgo() {
     if (this.state.bomb) {
-      console.log("starting");
       const firstAlgoGrid = this.state.grid;
       const secondAlgoGrid = this.state.grid;
 
@@ -145,8 +144,6 @@ export default class PathfindingVisualizer extends Component {
         bombNode
       );
 
-      console.log("first path clear");
-
       this.clearGrid(
         firstAlgoGrid,
         (this.keepWall = true),
@@ -154,21 +151,15 @@ export default class PathfindingVisualizer extends Component {
         (this.keepBomb = true)
       );
 
-      console.log("grid cleared");
-
       const secondVisitedNodesInOrder = dijkstra(
         firstAlgoGrid,
         bombNode,
         finishNode
       );
-      console.log("got second visited path");
       const secondNodesInShortestPathOrder = getNodesInShortestPathOrder(
         bombNode,
         finishNode
       );
-
-      console.log("hello");
-
       console.log(firstNodesInShortestPathOrder);
       console.log(secondNodesInShortestPathOrder);
     } else {
@@ -513,8 +504,8 @@ const createNewGridWithBombNodeToggled = (grid, row, col) => {
   const newNode = {
     ...node,
     isBomb: true,
-    isWeight: false,
-    isWall: false,
+    // isWeight: false,
+    // isWall: false,
   };
   newGrid[row][col] = newNode;
   BOMB_NODE_ROW = row;

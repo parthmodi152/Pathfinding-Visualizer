@@ -12,7 +12,7 @@ export function dijkstra(grid, startNode, finishNode) {
   while (unvisitedNodes.length != 0) {
     sortNodesByDistance(unvisitedNodes);
     const closestNode = unvisitedNodes.shift();
-    if (closestNode.isWall) continue;
+    if (closestNode.isWall && !closestNode.isBomb) continue;
     // If the closest node is at a distance of infinity,
     // we must be trapped and should therefore stop.
     if (closestNode.distance === Infinity) return visitedNodesInOrder;
@@ -22,7 +22,7 @@ export function dijkstra(grid, startNode, finishNode) {
     const unvisitedNeighbors = getUnvisitedNeighbors(closestNode, grid);
     for (const neighbor of unvisitedNeighbors) {
       if (closestNode.distance < neighbor.distance) {
-        if (neighbor.isWeight) {
+        if (neighbor.isWeight && !neighbor.isBomb) {
           neighbor.distance = closestNode.distance + 500;
         } else {
           neighbor.distance = closestNode.distance + 1;
